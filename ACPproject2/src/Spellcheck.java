@@ -36,7 +36,7 @@ public class Spellcheck {
 			//lineList.add(line);
 			line = reader.readLine();
 			
-			//for(int i = 0; i < 61402; i++) {
+			//for(int i = 0; i < h; i++) {
 				h.put(hCount, line);
 			System.out.println(hCount + "  "+ line);
 			//System.out.println(lineList);

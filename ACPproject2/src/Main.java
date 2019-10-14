@@ -4,9 +4,13 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.JFileChooser;
 
@@ -23,6 +27,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+
 public class Main extends Application {
 
 	private TextArea textArea;
@@ -33,12 +38,15 @@ public class Main extends Application {
         Scene scene = new Scene(borderPane, 750, 750);
         
         Spellcheck spellcheck = new Spellcheck();
+        CheckSpelling checkSpelling = new CheckSpelling();
+        //SpellChecker spellChecker = new SpellChecker();
 
         MenuBar menuBar  = new MenuBar();
         textArea = new TextArea();
         textArea.setWrapText(true);
         Menu    fileMenu = new Menu("File");
         Menu    editMenu = new Menu("Edit");
+        String textAreaString = textArea.toString();
 
         //Create Item File:Open
         MenuItem openItem = new MenuItem("Open");
@@ -46,8 +54,7 @@ public class Main extends Application {
         	 
             @Override
             public void handle(ActionEvent event) {
-                System.out.println("Chose the openItem item");
-                
+
                 FileChooser fileChooser = new FileChooser();
                 //fileChooser.setTitle("Select Text File");
                 //File selectedFile = fileChooser.showOpenDialog(null);
@@ -69,13 +76,14 @@ public class Main extends Application {
         	 
             @Override
             public void handle(ActionEvent event) {
-                System.out.println("Chose the saveItem item");
-                
-                FileChooser fileChooser = new FileChooser();
+
+            	FileChooser fileChooser = new FileChooser();
                 fileChooser.setTitle("Save File");
+                String currentPath = Paths.get(".").toAbsolutePath().normalize().toString();
+                fileChooser.setInitialDirectory(new File(currentPath));
                 fileChooser.setInitialFileName("TextFile.txt");
                 File savedFile = fileChooser.showSaveDialog(primaryStage);
-                
+               
                 if (savedFile != null) {
 
         			try {
@@ -83,9 +91,7 @@ public class Main extends Application {
         			}
         			catch(IOException e) {
         			}	
-        		}
-        		
-                
+        		}   
             }
         });
         
@@ -98,13 +104,20 @@ public class Main extends Application {
         	 
             @Override
             public void handle(ActionEvent event) {
-                System.out.println("Chose the spellcheck item");
-                spellcheck.getWords(null);
-            }
+                //spellcheck.getWords(null);
+            	//checkSpelling.main(null);
+            	String str = textArea.getText();
+            	String[] strArray = str.split(" ");
+            	for(int i=0; i<strArray.length; i++) {
+            	System.out.println(strArray[i]);
+            	}
+            	//System.out.println(textArea.getText());
+            	//new SpellChecker();
+            	}
         });
         
         // Set Accelerator for Exit MenuItem.
-        exitItem.setAccelerator(KeyCombination.keyCombination("Alt+F4"));
+        exitItem.setAccelerator(KeyCombination.keyCombination("Ctrl+Q"));
  
         // When user click on the Exit item
         exitItem.setOnAction(new EventHandler<ActionEvent>() {
@@ -130,7 +143,7 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        launch(args);
+      		launch(args);
     }
     
     private String readFile(File file) {
@@ -166,7 +179,7 @@ public class Main extends Application {
     		fileWriter.write(content);
     		fileWriter.close();
     	} catch (IOException ex) {
-    		
+    		Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
     	}
     }
     
@@ -178,4 +191,10 @@ public class Main extends Application {
 		writer.write(txt);
 		writer.close();
 	}
+    
+    public String getAllWords() {
+		String allWords = textArea.getText();
+    	return allWords;
+    	
+    }
 }
