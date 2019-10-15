@@ -39,6 +39,7 @@ public class Main extends Application {
         
         Spellcheck spellcheck = new Spellcheck();
         CheckSpelling checkSpelling = new CheckSpelling();
+        WordLists wordLists = new WordLists();
         //SpellChecker spellChecker = new SpellChecker();
 
         MenuBar menuBar  = new MenuBar();
@@ -105,12 +106,20 @@ public class Main extends Application {
             @Override
             public void handle(ActionEvent event) {
                 //spellcheck.getWords(null);
-            	//checkSpelling.main(null);
+            	
             	String str = textArea.getText();
+            	wordLists.setwordList(str);
             	String[] strArray = str.split(" ");
-            	for(int i=0; i<strArray.length; i++) {
-            	System.out.println(strArray[i]);
-            	}
+            	try {
+					checkSpelling.main(str);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+            	//for(int i=0; i<strArray.length; i++) {
+            		wordLists.setTextAreaString(str);
+            		//System.out.println(wordLists.getTextAreaString());
+            	//}
             	//System.out.println(textArea.getText());
             	//new SpellChecker();
             	}
