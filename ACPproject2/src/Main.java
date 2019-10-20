@@ -1,18 +1,14 @@
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.swing.JFileChooser;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -40,11 +36,11 @@ public class Main extends Application {
         Spellcheck spellcheck = new Spellcheck();
         CheckSpelling checkSpelling = new CheckSpelling();
         WordLists wordLists = new WordLists();
-        //SpellChecker spellChecker = new SpellChecker();
 
         MenuBar menuBar  = new MenuBar();
         textArea = new TextArea();
         textArea.setWrapText(true);
+        textArea.setPrefRowCount(200);
         Menu    fileMenu = new Menu("File");
         Menu    editMenu = new Menu("Edit");
         String textAreaString = textArea.toString();
@@ -55,19 +51,30 @@ public class Main extends Application {
         	 
             @Override
             public void handle(ActionEvent event) {
-
-                FileChooser fileChooser = new FileChooser();
-                //fileChooser.setTitle("Select Text File");
+            	
+            	FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("Select Text File");
                 //File selectedFile = fileChooser.showOpenDialog(null);
                 
                 FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
                 fileChooser.getExtensionFilters().add(extFilter);
-                		
+            		
                 File file = fileChooser.showOpenDialog(primaryStage);
-                if(file != null) {
-                	textArea.setText(readFile(file));
-                }
-        
+                try {
+					textArea.clear();
+                	FileInputStream fis = new FileInputStream(file);
+					BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
+					String line = reader.readLine().trim();
+					while(line != null) {
+						textArea.appendText(line + "\n");
+						line = reader.readLine();
+					}	
+				} catch (FileNotFoundException e) {	
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
             }
         });
         
@@ -116,12 +123,7 @@ public class Main extends Application {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-            	//for(int i=0; i<strArray.length; i++) {
             		wordLists.setTextAreaString(str);
-            		//System.out.println(wordLists.getTextAreaString());
-            	//}
-            	//System.out.println(textArea.getText());
-            	//new SpellChecker();
             	}
         });
         
@@ -204,6 +206,5 @@ public class Main extends Application {
     public String getAllWords() {
 		String allWords = textArea.getText();
     	return allWords;
-    	
     }
 }

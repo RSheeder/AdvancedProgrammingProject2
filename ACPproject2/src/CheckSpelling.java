@@ -1,10 +1,6 @@
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -34,7 +30,6 @@ public class CheckSpelling {
 				if(!checkWord(currentCheck, dictionary))
 				{
 					JOptionPane.showMessageDialog(null, currentCheck + " is spelled incorrectly");
-					System.out.println(currentCheck + " is spelled incorrectly");
 					noErrors = false;
 				}
 			}
@@ -66,28 +61,6 @@ public class CheckSpelling {
 	}
 	
 public static void main(String str) throws IOException {
-		
-		//Dictionary
-	
-		/*BufferedReader reader;
-		try {
-		reader = new BufferedReader(new FileReader("./src/Words.txt"));
-		String line = reader.readLine();
-		Path path = Paths.get("./src/Words.txt");
-		
-		while (line != null) {
-			line = reader.readLine();
-			
-		
-			//System.out.println(line);
-		}
-		if(line == null) {
-			line = reader.readLine();
-			reader.close();
-		}} catch (IOException e) {
-		//e.printStackTrace();
-		
-	}*/
 		String word;
 		Scanner wordFile = new Scanner(new File("./src/Words.txt")).useDelimiter(",\\s*");
 		List<String> tempList = new ArrayList<String>();
@@ -98,30 +71,16 @@ public static void main(String str) throws IOException {
 		
 		String[] wordList = tempList.toArray(new String[0]);
 		for (String s : wordList) {
-			//System.out.println(s);
 		}
-		//String[] wordList = new String[12];
-		//wordList[0] = "greetings";
-		//wordList[1] = "hello";
-		//wordList[2] = "goodbye";
-		
-		//String[] wordList = wordLists.getWordList().split(" ");
-		
-		
-		
-		
-		
-		
 		String input = str;
 		
 		if(spellCheck(input, wordList))
 		{
 			JOptionPane.showMessageDialog(null, "There were no spelling errors");
-			System.out.println("No Errors");
 		}
 		else
 		{
-			System.out.println("Errors");
+			
 		}
 	}
 }
